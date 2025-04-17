@@ -9,7 +9,7 @@
 import React from 'react';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -19,8 +19,8 @@ import './index.css';
 // Create root and render application
 ReactDOM.createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HashRouter>
+    <BrowserRouter basename="/moheb-s-library-system">
       <App />
-    </HashRouter>
+    </BrowserRouter>
   </StrictMode>
 );
