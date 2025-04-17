@@ -22,8 +22,6 @@ const TransactionList = () => {
     newTotalDebt: 0,
     booksAllowed: 0
   });
-  // Add state for clearing confirmation
-  const [showClearConfirmation, setShowClearConfirmation] = useState(false);
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +37,9 @@ const TransactionList = () => {
   // Add state variables for member filtering
   const [memberSearchTerm, setMemberSearchTerm] = useState('');
   const [filteredMembersForLending, setFilteredMembersForLending] = useState([]);
+
+  // Add state variables for clear transactions confirmation
+  const [showClearConfirmation, setShowClearConfirmation] = useState(false);
 
   // Fetch transactions, books, and members 
   const fetchData = () => {
@@ -371,26 +372,6 @@ const TransactionList = () => {
     setCurrentPage(1);
   };
 
-  // Generate page numbers
-  const getPageNumbers = () => {
-    const pageNumbers = [];
-    const totalPagesToShow = Math.min(5, totalPages);
-    
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = startPage + totalPagesToShow - 1;
-    
-    if (endPage > totalPages) {
-      endPage = totalPages;
-      startPage = Math.max(1, endPage - totalPagesToShow + 1);
-    }
-    
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(i);
-    }
-    
-    return pageNumbers;
-  };
-
   // Calculate debt percentage for visual indicator
   const getDebtPercentage = (debt) => {
     return (debt / MAX_DEBT_LIMIT) * 100;
@@ -416,12 +397,12 @@ const TransactionList = () => {
     });
   };
 
-  // Handle clearing all transactions
+  // Handle clear transactions
   const handleClearTransactions = () => {
     setShowClearConfirmation(true);
   };
 
-  // Confirm and clear all transactions
+  // Handle confirm clear transactions
   const confirmClearTransactions = () => {
     // Get all transaction IDs
     const transactionIds = transactions.map(t => t.id);
@@ -467,21 +448,21 @@ const TransactionList = () => {
                   className={`btn ${filterStatus === 'all' ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setFilterStatus('all')}
                 >
-                  All Transactions
+                  <i className="fas fa-list me-2"></i> All Transactions
                 </button>
                 <button 
                   type="button" 
                   className={`btn ${filterStatus === 'active' ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setFilterStatus('active')}
                 >
-                  Active Loans
+                  <i className="fas fa-clock me-2"></i> Active Loans
                 </button>
                 <button 
                   type="button" 
                   className={`btn ${filterStatus === 'returned' ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setFilterStatus('returned')}
                 >
-                  Returned Books
+                  <i className="fas fa-check-circle me-2"></i> Returned Books
                 </button>
               </div>
             </div>
@@ -491,8 +472,9 @@ const TransactionList = () => {
           <div className="d-flex justify-content-end">
             {/* Lend Books Button */}
             <button
-              className="btn btn-success me-2"
+              className="btn btn-success me-2 animate-slideIn"
               onClick={() => setShowLendForm(!showLendForm)}
+              style={{animationDelay: "0.1s"}}
             >
               <i className={`fas ${showLendForm ? 'fa-minus' : 'fa-book'} me-1`}></i>
               {showLendForm ? 'Hide Form' : 'Lend Books to Member'}
@@ -500,9 +482,10 @@ const TransactionList = () => {
             
             {/* Clear Transactions Button */}
             <button
-              className="btn btn-danger"
+              className="btn btn-danger animate-slideIn"
               onClick={handleClearTransactions}
               disabled={transactions.length === 0}
+              style={{animationDelay: "0.2s"}}
             >
               <i className="fas fa-trash me-1"></i>
               Clear Transactions
@@ -510,6 +493,38 @@ const TransactionList = () => {
           </div>
         </div>
       </div>
+
+      {/* Clear Transactions Confirmation */}
+      {showClearConfirmation && (
+        <div className="modal" style={{ display: 'block' }}>
+          <div className="modal-dialog animate-slideIn" style={{animationDelay: "0.1s"}}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  <i className="fas fa-exclamation-triangle text-danger me-2"></i>
+                  Confirm Clear Transactions
+                </h5>
+                <button type="button" className="btn-close" onClick={() => setShowClearConfirmation(false)}></button>
+              </div>
+              <div className="modal-body">
+                <p className="mb-0">Are you sure you want to clear all transactions?</p>
+                <p className="text-danger mb-0">
+                  <small><i className="fas fa-info-circle me-1"></i> This action cannot be undone.</small>
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowClearConfirmation(false)}>
+                  <i className="fas fa-times me-1"></i> Cancel
+                </button>
+                <button type="button" className="btn btn-danger" onClick={confirmClearTransactions}>
+                  <i className="fas fa-trash me-1"></i> Clear Transactions
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="modal-backdrop show" onClick={() => setShowClearConfirmation(false)}></div>
+        </div>
+      )}
 
       {/* Lend Books Form */}
       {showLendForm && (
@@ -783,32 +798,56 @@ const TransactionList = () => {
       {/* Transaction Table */}
       {isLoading ? (
         <div className="text-center py-5 animate-fadeIn">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+          <div className="spinner-wrapper">
+            <div className="spinner-border text-primary" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <div className="spinner-border text-secondary" role="status" style={{ width: "3rem", height: "3rem", animationDelay: "0.2s" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <div className="spinner-border text-success" role="status" style={{ width: "3rem", height: "3rem", animationDelay: "0.4s" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
           </div>
-          <p className="mt-2">Loading transactions...</p>
+          <p className="mt-4 fs-5 fw-light">Loading transactions...</p>
+          <p className="text-muted">Please wait while we fetch the latest data</p>
         </div>
       ) : filteredTransactions.length === 0 ? (
         <div className="alert alert-info animate-fadeIn">
-          <i className="fas fa-info-circle me-2"></i>
-          No transactions found. {filterStatus !== 'all' && <span>Try changing the filter or <button className="btn btn-link p-0" onClick={() => setFilterStatus('all')}>view all transactions</button>.</span>}
+          <div className="text-center py-4">
+            <i className="fas fa-info-circle fa-3x mb-3 text-info animate-pulse"></i>
+            <h4>No transactions found</h4>
+            <p className="mb-0">
+              {filterStatus !== 'all' ? (
+                <>
+                  No {filterStatus === 'active' ? 'active loans' : 'returned books'} to display. 
+                  Try <button className="btn btn-link p-0 d-inline" onClick={() => setFilterStatus('all')}>viewing all transactions</button>.
+                </>
+              ) : (
+                <>
+                  There are no transactions in the system yet. 
+                  Use the "<span className="text-success">Lend Books to Member</span>" button to create your first transaction.
+                </>
+              )}
+            </p>
+          </div>
         </div>
       ) : (
         <>
           <div className="table-responsive animate-fadeIn d-none d-md-block">
-      <table className="table table-striped table-hover">
-        <thead className="table-dark">
-          <tr>
-            <th>ID</th>
+            <table className="table table-striped table-hover">
+              <thead className="table-dark">
+                <tr>
+                  <th>ID</th>
                   <th>Book</th>
                   <th>Member</th>
-            <th>Date</th>
+                  <th>Date</th>
                   <th>Debt Cost</th>
                   <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody className="table-fade-in">
                 {displayedTransactions.map((transaction) => {
                   const book = bookMap[transaction.bookID];
                   // Get debt cost from transaction or from book or default
@@ -816,7 +855,7 @@ const TransactionList = () => {
                   
                   return (
                     <tr key={transaction.id} className={transaction.returned ? '' : 'table-warning fw-bold'}>
-              <td>{transaction.id}</td>
+                      <td>{transaction.id}</td>
                       <td>
                         <i className="fas fa-book me-2"></i>
                         {book?.title || `Book ID: ${transaction.bookID}`}
@@ -845,26 +884,26 @@ const TransactionList = () => {
                           </span>
                         )}
                       </td>
-              <td>
-                {!transaction.returned && (
-                  <button
+                      <td>
+                        {!transaction.returned && (
+                          <button
                             className="btn btn-primary btn-sm"
-                    onClick={() => handleReturnBook(transaction.id)}
-                  >
+                            onClick={() => handleReturnBook(transaction.id)}
+                          >
                             <i className="fas fa-undo-alt me-1"></i> Return Book
-                  </button>
-                )}
-              </td>
-            </tr>
+                          </button>
+                        )}
+                      </td>
+                    </tr>
                   );
                 })}
-        </tbody>
-      </table>
+              </tbody>
+            </table>
           </div>
 
           {/* Mobile Card View with 3D effect */}
-          <div className="d-md-none animate-fadeIn">
-            {displayedTransactions.map((transaction) => {
+          <div className="d-md-none animate-slideIn">
+            {displayedTransactions.map((transaction, index) => {
               const book = bookMap[transaction.bookID];
               const debtCost = transaction.debtCost || (book ? book.debtCost : 50);
               
@@ -872,6 +911,7 @@ const TransactionList = () => {
                 <div 
                   key={transaction.id}
                   className={`card mb-4 card-3d-effect ${transaction.returned ? 'border-light' : 'border-warning'}`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="card-header d-flex justify-content-between align-items-center">
                     <h5 className="mb-0">
@@ -936,7 +976,7 @@ const TransactionList = () => {
           </div>
 
           {/* Pagination */}
-          <div className="animate-fadeIn" style={{animationDelay: "0.2s"}}>
+          <div className="animate-fadeIn" style={{animationDelay: "0.3s"}}>
             <div className="d-flex justify-content-between align-items-center mt-4">
               <div className="d-flex align-items-center">
                 <label className="me-2">Items per page:</label>
@@ -977,7 +1017,12 @@ const TransactionList = () => {
                     </button>
                   </li>
                   
-                  {getPageNumbers().map(number => (
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    const startPage = Math.max(1, currentPage - 2);
+                    const endPage = Math.min(startPage + 4, totalPages);
+                    const offset = startPage > 1 ? startPage - 1 : 0;
+                    return i + startPage <= endPage ? i + startPage : null;
+                  }).filter(Boolean).map(number => (
                     <li 
                       key={number} 
                       className={`page-item ${currentPage === number ? 'active' : ''}`}
@@ -1018,19 +1063,21 @@ const TransactionList = () => {
 
       {/* Transaction Summary Cards */}
       {!isLoading && transactions.length > 0 && (
-        <div className="row mt-4 animate-fadeIn" style={{animationDelay: "0.3s"}}>
+        <div className="row mt-4 animate-fadeIn" style={{animationDelay: "0.4s"}}>
           <div className="col-md-4 mb-3">
-            <div className="card bg-light">
-              <div className="card-body">
+            <div className="card bg-light animate-slideInLeft" style={{animationDelay: "0.5s"}}>
+              <div className="card-body text-center">
+                <i className="fas fa-exchange-alt fa-2x mb-3 text-primary"></i>
                 <h5 className="card-title">Total Transactions</h5>
-                <h2 className="display-4 animate-pulse">{transactions.length}</h2>
+                <h2 className="display-4 animate-softPulse">{transactions.length}</h2>
                 <p className="text-muted">All-time transaction count</p>
               </div>
             </div>
           </div>
           <div className="col-md-4 mb-3">
-            <div className="card bg-light">
-              <div className="card-body">
+            <div className="card bg-light animate-slideInLeft" style={{animationDelay: "0.6s"}}>
+              <div className="card-body text-center">
+                <i className="fas fa-clock fa-2x mb-3 text-warning"></i>
                 <h5 className="card-title">Active Loans</h5>
                 <h2 className="display-4">{transactions.filter(t => !t.returned).length}</h2>
                 <p className="text-muted">Books currently lent out</p>
@@ -1038,35 +1085,15 @@ const TransactionList = () => {
             </div>
           </div>
           <div className="col-md-4 mb-3">
-            <div className="card bg-light">
-              <div className="card-body">
+            <div className="card bg-light animate-slideInLeft" style={{animationDelay: "0.7s"}}>
+              <div className="card-body text-center">
+                <i className="fas fa-pound-sign fa-2x mb-3 text-success"></i>
                 <h5 className="card-title">Total Revenue</h5>
-                <h2 className="display-4 animate-pulse">EGP {transactions.reduce((sum, t) => {
+                <h2 className="display-4 animate-softPulse">EGP {transactions.reduce((sum, t) => {
                   const book = bookMap[t.bookID];
                   return sum + (t.debtCost || (book ? book.debtCost : 50));
                 }, 0)}</h2>
                 <p className="text-muted">Based on each book's debt cost</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Clear Transactions Confirmation */}
-      {showClearConfirmation && (
-        <div className="modal" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Clear Transactions</h5>
-                <button type="button" className="btn-close" onClick={() => setShowClearConfirmation(false)}></button>
-              </div>
-              <div className="modal-body">
-                <p>Are you sure you want to clear all transactions?</p>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowClearConfirmation(false)}>Cancel</button>
-                <button type="button" className="btn btn-danger" onClick={confirmClearTransactions}>Clear Transactions</button>
               </div>
             </div>
           </div>
