@@ -53,7 +53,7 @@
       "publisher": "HarperOne",
       "lent": true,
       "totalCopies": 10,
-      "availableCopies": 1,
+      "availableCopies": 10,
       "debtCost": 60,
       "category": "Self-Help"
     },
@@ -91,7 +91,7 @@
       "publisher": "Princeton University Press",
       "lent": true,
       "totalCopies": 7,
-      "availableCopies": 3,
+      "availableCopies": 7,
       "debtCost": 65,
       "category": "Science"
     },
@@ -110,7 +110,7 @@
       "publisher": "Random House Trade Paperbacks",
       "lent": true,
       "totalCopies": 2,
-      "availableCopies": 1,
+      "availableCopies": 2,
       "debtCost": 40,
       "category": "Poetry"
     },
@@ -331,6 +331,9 @@
       "publication_date": "8/31/1998",
       "publisher": "Penguin Books Australia Ltd.",
       "lent": false,
+      "totalCopies": 3,
+      "availableCopies": 3,
+      "debtCost": 55,
       "category": "Fiction"
     },
     {
@@ -347,6 +350,9 @@
       "publication_date": "9/5/2000",
       "publisher": "St. Martins Press-3PL",
       "lent": false,
+      "totalCopies": 3,
+      "availableCopies": 3,
+      "debtCost": 55,
       "category": "Fiction"
     },
     {
@@ -363,13 +369,16 @@
       "publication_date": "5/1/2006",
       "publisher": "Simon  Schuster Audio",
       "lent": false,
+      "totalCopies": 3,
+      "availableCopies": 3,
+      "debtCost": 55,
       "category": "Fiction"
     },
     {
       "id": "c77b",
       "title": "moheb",
       "authors": "moheb",
-      "isbn": "",
+      "isbn": "1234567890",
       "publisher": "moheb",
       "num_pages": "21",
       "category": "Other"
@@ -394,170 +403,28 @@
   ],
   "transactions": [
     {
-      "id": "67b0",
-      "bookID": "8205",
-      "memberID": "454d",
-      "date": "3/5/2025",
-      "returned": true
-    },
-    {
-      "id": "e776",
+      "id": "7723",
       "bookID": "44183",
       "memberID": "454d",
-      "date": "3/5/2025",
-      "returned": true
-    },
-    {
-      "id": "1a25",
-      "bookID": "31389",
-      "memberID": "ba9a",
       "date": "4/17/2025",
-      "returned": true
+      "returned": true,
+      "debtCost": 55
     },
     {
-      "id": "7dc9",
-      "bookID": "29879",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true
-    },
-    {
-      "id": "bfd3",
-      "bookID": "8197",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true
-    },
-    {
-      "id": "e45c",
-      "bookID": "44300",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true
-    },
-    {
-      "id": "4426",
-      "bookID": "43877",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true
-    },
-    {
-      "id": "aa13",
+      "id": "529e",
       "bookID": "18745",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true
-    },
-    {
-      "id": "6d29",
-      "bookID": "5552",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true
-    },
-    {
-      "id": "c691",
-      "bookID": "8197",
-      "memberID": "454d",
-      "date": "4/17/2025",
-      "returned": true
-    },
-    {
-      "id": "d02f",
-      "bookID": "43877",
       "memberID": "454d",
       "date": "4/17/2025",
       "returned": true,
-      "debtCost": 50
+      "debtCost": 55
     },
     {
-      "id": 20,
+      "id": "1e15",
       "bookID": "890",
-      "memberID": "10",
-      "date": "2023-09-20",
-      "returned": true,
-      "debtCost": 40
-    },
-    {
-      "id": 21,
-      "bookID": "676",
-      "memberID": "1",
-      "date": "2023-09-25",
-      "returned": true,
-      "debtCost": 40
-    },
-    {
-      "id": 22,
-      "bookID": "5552",
-      "memberID": "2",
-      "date": "2023-10-01",
-      "returned": true,
-      "debtCost": 65
-    },
-    {
-      "id": "b212",
-      "bookID": "31389",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true,
-      "debtCost": 50
-    },
-    {
-      "id": "125e",
-      "bookID": "39749",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true,
-      "debtCost": 50
-    },
-    {
-      "id": "c942",
-      "bookID": "18745",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true,
-      "debtCost": 55
-    },
-    {
-      "id": "15a8",
-      "bookID": "44300",
-      "memberID": "ba9a",
-      "date": "4/17/2025",
-      "returned": true,
-      "debtCost": 45
-    },
-    {
-      "id": "0271",
-      "bookID": "26827",
-      "memberID": "454d",
-      "date": "4/17/2025",
-      "returned": true,
-      "debtCost": 65
-    },
-    {
-      "id": "8e23",
-      "bookID": "18745",
-      "memberID": "454d",
-      "date": "4/17/2025",
-      "returned": true,
-      "debtCost": 55
-    },
-    {
-      "id": "2db9",
-      "bookID": "676",
       "memberID": "454d",
       "date": "4/17/2025",
       "returned": true,
       "debtCost": 40
-    },
-    {
-      "id": "a621",
-      "bookID": "1725",
-      "memberID": "454d",
-      "date": "4/17/2025",
-      "returned": true,
-      "debtCost": 70
     }
   ]
 }

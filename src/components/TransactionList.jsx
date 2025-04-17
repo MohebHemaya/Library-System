@@ -22,6 +22,8 @@ const TransactionList = () => {
     newTotalDebt: 0,
     booksAllowed: 0
   });
+  // Add state for clearing confirmation
+  const [showClearConfirmation, setShowClearConfirmation] = useState(false);
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -414,6 +416,41 @@ const TransactionList = () => {
     });
   };
 
+  // Handle clearing all transactions
+  const handleClearTransactions = () => {
+    setShowClearConfirmation(true);
+  };
+
+  // Confirm and clear all transactions
+  const confirmClearTransactions = () => {
+    // Get all transaction IDs
+    const transactionIds = transactions.map(t => t.id);
+    
+    // Create an array of promises to delete each transaction
+    const deletePromises = transactionIds.map(id => 
+      axios.delete(`http://localhost:8000/transactions/${id}`)
+    );
+
+    // Execute all delete operations
+    Promise.all(deletePromises)
+      .then(() => {
+        // Reset transaction states
+        setTransactions([]);
+        setFilteredTransactions([]);
+        setDisplayedTransactions([]);
+        setTotalPages(1);
+        setCurrentPage(1);
+        setShowClearConfirmation(false);
+        
+        // Refresh data
+        fetchData();
+      })
+      .catch(error => {
+        console.error('Error clearing transactions:', error);
+        setShowClearConfirmation(false);
+      });
+  };
+
   return (
     <div className="transaction-list-container">
       <h1 className="section-title text-center mb-4">Transaction Management</h1>
@@ -451,14 +488,26 @@ const TransactionList = () => {
           </div>
         </div>
         <div className="col-md-4 text-end">
-      {/* Lend Books Button */}
-      <button
-            className="btn btn-success"
-        onClick={() => setShowLendForm(!showLendForm)}
-      >
-            <i className={`fas ${showLendForm ? 'fa-minus' : 'fa-book'} me-1`}></i>
-            {showLendForm ? 'Hide Form' : 'Lend Books to Member'}
-      </button>
+          <div className="d-flex justify-content-end">
+            {/* Lend Books Button */}
+            <button
+              className="btn btn-success me-2"
+              onClick={() => setShowLendForm(!showLendForm)}
+            >
+              <i className={`fas ${showLendForm ? 'fa-minus' : 'fa-book'} me-1`}></i>
+              {showLendForm ? 'Hide Form' : 'Lend Books to Member'}
+            </button>
+            
+            {/* Clear Transactions Button */}
+            <button
+              className="btn btn-danger"
+              onClick={handleClearTransactions}
+              disabled={transactions.length === 0}
+            >
+              <i className="fas fa-trash me-1"></i>
+              Clear Transactions
+            </button>
+          </div>
         </div>
       </div>
 
@@ -997,6 +1046,27 @@ const TransactionList = () => {
                   return sum + (t.debtCost || (book ? book.debtCost : 50));
                 }, 0)}</h2>
                 <p className="text-muted">Based on each book's debt cost</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Clear Transactions Confirmation */}
+      {showClearConfirmation && (
+        <div className="modal" style={{ display: 'block' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Confirm Clear Transactions</h5>
+                <button type="button" className="btn-close" onClick={() => setShowClearConfirmation(false)}></button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to clear all transactions?</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowClearConfirmation(false)}>Cancel</button>
+                <button type="button" className="btn btn-danger" onClick={confirmClearTransactions}>Clear Transactions</button>
               </div>
             </div>
           </div>

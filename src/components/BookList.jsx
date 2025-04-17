@@ -238,9 +238,9 @@ const BookList = () => {
         return;
       }
       
-      axios
-        .delete(`http://localhost:8000/books/${id}`)
-        .then(() => {
+    axios
+      .delete(`http://localhost:8000/books/${id}`)
+      .then(() => {
           const updatedBooks = books.filter((book) => book.id !== id);
           setBooks(updatedBooks);
           setFilteredBooks(updatedBooks);
@@ -259,8 +259,8 @@ const BookList = () => {
           if (currentPage > newTotalPages && newTotalPages > 0) {
             setCurrentPage(newTotalPages);
           }
-        })
-        .catch((error) => console.error('Error deleting the book:', error));
+      })
+      .catch((error) => console.error('Error deleting the book:', error));
     }
   };
 
@@ -311,12 +311,12 @@ const BookList = () => {
           </div>
           
           <form onSubmit={handleSearch} className="mb-3 search-form-mobile">
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
+        <div className="input-group">
+          <input
+            type="text"
+            className="form-control"
                 placeholder="Search by title or author..."
-                value={searchTerm}
+            value={searchTerm}
                 onChange={handleSearchChange}
               />
               <button type="submit" className="btn btn-primary d-none d-sm-inline-block">
@@ -346,20 +346,20 @@ const BookList = () => {
                 }}
               >
                 <i className="fas fa-times"></i>
-              </button>
-            </div>
-          </form>
+          </button>
         </div>
-        
+      </form>
+        </div>
+
         <div className="col-lg-4 col-md-12 text-md-end text-center">
           <div className="btn-group mb-2 w-100 w-md-auto">
-            <button
+      <button
               className={`btn ${showAddBookForm ? 'btn-danger' : 'btn-success'}`}
-              onClick={() => setShowAddBookForm(!showAddBookForm)}
-            >
+        onClick={() => setShowAddBookForm(!showAddBookForm)}
+      >
               <i className={`fas ${showAddBookForm ? 'fa-minus' : 'fa-plus'} me-1`}></i>
               {showAddBookForm ? 'Hide Form' : 'Add New Book'}
-            </button>
+      </button>
           </div>
         </div>
       </div>
@@ -418,26 +418,26 @@ const BookList = () => {
             <div className="row row-tablet-adjust g-3">
               <div className="col-lg-6 col-md-6 col-sm-12">
                 <label htmlFor="bookTitle" className="form-label">Book Title <span className="text-danger">*</span></label>
-                <input
-                  type="text"
+            <input
+              type="text"
                   className="form-control"
                   id="bookTitle"
                   placeholder="Enter book title"
-                  value={newBook.title}
+              value={newBook.title}
                   onChange={(e) =>
                     setNewBook({ ...newBook, title: e.target.value })
                   }
                   required
-                />
+            />
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12">
                 <label htmlFor="bookAuthors" className="form-label">Author(s) <span className="text-danger">*</span></label>
-                <input
-                  type="text"
+            <input
+              type="text"
                   className="form-control"
                   id="bookAuthors"
                   placeholder="Author name(s)"
-                  value={newBook.authors}
+              value={newBook.authors}
                   onChange={(e) =>
                     setNewBook({ ...newBook, authors: e.target.value })
                   }
@@ -449,8 +449,8 @@ const BookList = () => {
             <div className="row row-tablet-adjust g-3 mt-1">
               <div className="col-lg-4 col-md-4 col-sm-6">
                 <label htmlFor="bookISBN" className="form-label">ISBN</label>
-                <input
-                  type="text"
+            <input
+              type="text"
                   className="form-control"
                   id="bookISBN"
                   placeholder="ISBN number"
@@ -462,8 +462,8 @@ const BookList = () => {
               </div>
               <div className="col-lg-4 col-md-4 col-sm-6">
                 <label htmlFor="bookPublisher" className="form-label">Publisher</label>
-                <input
-                  type="text"
+            <input
+              type="text"
                   className="form-control"
                   id="bookPublisher"
                   placeholder="Publisher name"
@@ -480,7 +480,7 @@ const BookList = () => {
                   className="form-control"
                   id="bookPages"
                   placeholder="Number of pages"
-                  value={newBook.num_pages}
+              value={newBook.num_pages}
                   onChange={(e) =>
                     setNewBook({ ...newBook, num_pages: e.target.value })
                   }
@@ -563,7 +563,7 @@ const BookList = () => {
                 disabled={!newBook.title || !newBook.authors}
               >
                 <i className="fas fa-save me-1"></i> Save Book
-              </button>
+            </button>
             </div>
           </div>
         </div>
@@ -588,26 +588,26 @@ const BookList = () => {
         <>
           {/* Desktop Table View */}
           <div className="table-responsive animate-fadeIn d-none d-md-block">
-            <table className="table table-striped table-hover">
-              <thead className="table-dark">
-                <tr>
-                  <th>Title</th>
+      <table className="table table-striped table-hover">
+        <thead className="table-dark">
+          <tr>
+            <th>Title</th>
                   <th>Author</th>
                   <th>Category</th>
                   <th>Status</th>
                   <th>Copies</th>
                   <th>Debt Cost</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
                 {displayedBooks.map((book) => (
                   <tr key={book.id} className={book.availableCopies === 0 ? "table-warning" : ""}>
                     <td>
                       <strong>{book.title}</strong>
                       {book.isbn && <div className="small text-muted">ISBN: {book.isbn}</div>}
                     </td>
-                    <td>{book.authors}</td>
+              <td>{book.authors}</td>
                     <td>
                       <span className="badge bg-info">{book.category || 'Uncategorized'}</span>
                     </td>
@@ -633,7 +633,7 @@ const BookList = () => {
                           className="btn btn-primary"
                         >
                           <i className="fas fa-edit"></i>
-                        </Link>
+                </Link>
                         <button
                           className="btn btn-danger"
                           onClick={() => handleDeleteBook(book.id)}
@@ -641,13 +641,13 @@ const BookList = () => {
                           title={book.totalCopies !== book.availableCopies ? "Cannot delete book with borrowed copies" : "Delete book"}
                         >
                           <i className="fas fa-trash-alt"></i>
-                        </button>
+                </button>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
           </div>
           
           {/* Mobile Card View */}
