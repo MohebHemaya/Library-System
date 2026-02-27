@@ -3,10 +3,8 @@ Built a React-based web app with Tailwind CSS for managing library operations, f
 
 Tech: React, Tailwind CSS, React Router, JSON Server.
 
-to start the project 
+to start the project
 
-npm install 
+npm install
 
 npm run dev
-
-
