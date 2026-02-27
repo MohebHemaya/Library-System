@@ -29,7 +29,7 @@ const MemberList = () => {
   const fetchMembers = () => {
     setIsLoading(true);
     axios
-      .get(API_CONFIG.MEMBERS)
+      .get(API_CONFIG.getResourceUrl('members'))
       .then((response) => {
         // Set default maxDebt if missing in existing members
         const membersWithMaxDebt = response.data.map(member => ({
@@ -132,7 +132,7 @@ const MemberList = () => {
     };
     
     axios
-      .post(API_CONFIG.MEMBERS, memberToAdd)
+      .post(API_CONFIG.getResourceUrl('members'), memberToAdd)
       .then((response) => {
         const updatedMembers = [...members, response.data];
         setMembers(updatedMembers);
@@ -158,7 +158,7 @@ const MemberList = () => {
     
     if (window.confirm('Are you sure you want to delete this member?')) {
       axios
-        .delete(`${API_CONFIG.MEMBERS}?id=${id}`)
+        .delete(API_CONFIG.getResourceItemUrl('members', id))
         .then(() => {
           const updatedMembers = members.filter((member) => member.id !== id);
           setMembers(updatedMembers);

@@ -37,7 +37,7 @@ const EditBook = () => {
     setValidationError('');
     setSaveSuccess(false);
     
-    axios.get(`${API_CONFIG.BOOKS}?id=${id}`)
+    axios.get(API_CONFIG.getResourceItemUrl('books', id))
       .then(response => {
         // Ensure all properties have default values if missing
         const bookData = {
@@ -145,7 +145,7 @@ const EditBook = () => {
       return;
     }
     
-    axios.put(`${API_CONFIG.BOOKS}?id=${id}`, book)
+    axios.put(API_CONFIG.getResourceItemUrl('books', id), book)
       .then(() => {
         setSaveSuccess(true);
         setValidationError('');

@@ -1,16 +1,14 @@
 // API Configuration
-// Automatically detects environment and uses appropriate API URL
+// Same URLs work for both development and production
 
-const isDevelopment = import.meta.env.DEV;
-const API_BASE_URL = isDevelopment 
-  ? 'http://localhost:5173/api'  // Vite dev server proxy
-  : '/api';
+const API_BASE_URL = '/api';
 
 export const API_CONFIG = {
   BASE_URL: API_BASE_URL,
-  BOOKS: `${API_BASE_URL}/db?resource=books`,
-  MEMBERS: `${API_BASE_URL}/db?resource=members`,
-  TRANSACTIONS: `${API_BASE_URL}/db?resource=transactions`
+  
+  // Helper methods for building API URLs
+  getResourceUrl: (resource) => `${API_BASE_URL}/db?resource=${resource}`,
+  getResourceItemUrl: (resource, id) => `${API_BASE_URL}/db?resource=${resource}&id=${id}`
 };
 
 export default API_CONFIG;

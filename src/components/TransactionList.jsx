@@ -43,9 +43,9 @@ const TransactionList = () => {
   const fetchData = () => {
     setIsLoading(true);
     Promise.all([
-      axios.get(API_CONFIG.BOOKS),
-      axios.get(API_CONFIG.MEMBERS),
-      axios.get(API_CONFIG.TRANSACTIONS)
+      axios.get(API_CONFIG.getResourceUrl('books')),
+      axios.get(API_CONFIG.getResourceUrl('members')),
+      axios.get(API_CONFIG.getResourceUrl('transactions'))
     ])
       .then(([booksRes, membersRes, transactionsRes]) => {
         const bookData = booksRes.data;
@@ -249,7 +249,7 @@ const TransactionList = () => {
     });
 
     // Update member's debt
-    axios.patch(`${API_CONFIG.MEMBERS}?id=${member.id}`, {
+    axios.patch(API_CONFIG.getResourceItemUrl('members', member.id), {
         debt: member.debt + totalCost})
       .then(() => {
         // For each book, decrement available copies and set lent status if needed
@@ -260,7 +260,7 @@ const TransactionList = () => {
             // A book is considered lent when all copies are borrowed
             const isLent = newAvailableCopies === 0;
             
-            return axios.patch(`${API_CONFIG.BOOKS}?id=${bookId}`, { 
+            return axios.patch(API_CONFIG.getResourceItemUrl('books', bookId), { 
               availableCopies: newAvailableCopies,
               lent: isLent
             });
@@ -270,7 +270,7 @@ const TransactionList = () => {
             // Add transactions to the database
             Promise.all(
               newTransactions.map((transaction) =>
-                axios.post(API_CONFIG.TRANSACTIONS, transaction)
+                axios.post(API_CONFIG.getResourceUrl('transactions'), transaction)
               )
             )
               .then((responses) => {
@@ -312,21 +312,21 @@ const TransactionList = () => {
 
     // Reduce member's debt by the book's debt cost
     axios
-      .patch(`${API_CONFIG.MEMBERS}?id=${member.id}`, {
+      .patch(API_CONFIG.getResourceItemUrl('members', member.id), {
         debt: Math.max(0, member.debt - debtCost) // Ensure debt doesn't go below 0
       })
       .then(() => {
         // Increment the book's available copies and update lent status
         const newAvailableCopies = (book.availableCopies || 0) + 1;
         axios
-          .patch(`${API_CONFIG.BOOKS}?id=${transaction.bookID}`, { 
+          .patch(API_CONFIG.getResourceItemUrl('books', transaction.bookID), { 
             availableCopies: newAvailableCopies,
             lent: newAvailableCopies < book.totalCopies  // Book is considered lent if not all copies are available
           })
           .then(() => {
             // Mark the transaction as returned
             axios
-              .patch(`${API_CONFIG.TRANSACTIONS}?id=${transactionId}`, {
+              .patch(API_CONFIG.getResourceItemUrl('transactions', transactionId), {
                 returned: true
               })
               .then((response) => {

@@ -40,7 +40,7 @@ const BookList = () => {
   const fetchBooks = () => {
     setIsLoading(true);
     axios
-      .get(API_CONFIG.BOOKS)
+      .get(API_CONFIG.getResourceUrl('books'))
       .then((response) => {
         // Ensure all books have a debtCost property, default to 50 if not present
         // Also ensure they have totalCopies and availableCopies properties
@@ -192,7 +192,7 @@ const BookList = () => {
     };
     
     axios
-      .post(API_CONFIG.BOOKS, bookToAdd)
+      .post(API_CONFIG.getResourceUrl('books'), bookToAdd)
       .then((response) => {
         // Update local state with the new book
         const updatedBooks = [...books, response.data];
@@ -240,7 +240,7 @@ const BookList = () => {
       }
       
       axios
-        .delete(`${API_CONFIG.BOOKS}?id=${id}`)
+        .delete(API_CONFIG.getResourceItemUrl('books', id))
         .then(() => {
           const updatedBooks = books.filter((book) => book.id !== id);
           setBooks(updatedBooks);

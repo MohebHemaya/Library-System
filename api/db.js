@@ -567,7 +567,7 @@ let database = {
 
 export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -601,6 +601,15 @@ export default function handler(req, res) {
     }
 
     case 'PUT': {
+      if (!id) return res.status(400).json({ error: 'ID required' });
+      const index = database[resource].findIndex(item => item.id === id);
+      if (index === -1) return res.status(404).json({ error: 'Not found' });
+      database[resource][index] = { ...database[resource][index], ...req.body };
+      res.json(database[resource][index]);
+      break;
+    }
+
+    case 'PATCH': {
       if (!id) return res.status(400).json({ error: 'ID required' });
       const index = database[resource].findIndex(item => item.id === id);
       if (index === -1) return res.status(404).json({ error: 'Not found' });
