@@ -10,4 +10,3 @@ npm install
 npm run dev
 
 
-npm db (in another terminal)
