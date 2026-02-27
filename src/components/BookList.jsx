@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
-const API_URL = 'https://my-json-server.typicode.com/MohebHemaya/db';
+import API_CONFIG from '../config/api';
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -37,11 +36,11 @@ const BookList = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [categories, setCategories] = useState([]);
 
-  // Fetch books from JSON Server
+  // Fetch books from API
   const fetchBooks = () => {
     setIsLoading(true);
     axios
-      .get(`${API_URL}/books`)
+      .get(API_CONFIG.BOOKS)
       .then((response) => {
         // Ensure all books have a debtCost property, default to 50 if not present
         // Also ensure they have totalCopies and availableCopies properties
@@ -193,7 +192,7 @@ const BookList = () => {
     };
     
     axios
-      .post(`${API_URL}/books`, bookToAdd)
+      .post(API_CONFIG.BOOKS, bookToAdd)
       .then((response) => {
         // Update local state with the new book
         const updatedBooks = [...books, response.data];
@@ -241,7 +240,7 @@ const BookList = () => {
       }
       
       axios
-        .delete(`${API_URL}/books/${id}`)
+        .delete(`${API_CONFIG.BOOKS}?id=${id}`)
         .then(() => {
           const updatedBooks = books.filter((book) => book.id !== id);
           setBooks(updatedBooks);

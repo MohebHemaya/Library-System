@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const API_URL = 'https://my-json-server.typicode.com/MohebHemaya/db';
+import API_CONFIG from '../config/api';
 
 const TransactionList = () => {
   // Define maximum debt limit as a constant for consistency
@@ -44,9 +43,9 @@ const TransactionList = () => {
   const fetchData = () => {
     setIsLoading(true);
     Promise.all([
-      axios.get(`${API_URL}/books`),
-      axios.get(`${API_URL}/members`),
-      axios.get(`${API_URL}/transactions`)
+      axios.get(API_CONFIG.BOOKS),
+      axios.get(API_CONFIG.MEMBERS),
+      axios.get(API_CONFIG.TRANSACTIONS)
     ])
       .then(([booksRes, membersRes, transactionsRes]) => {
         const bookData = booksRes.data;
@@ -250,7 +249,7 @@ const TransactionList = () => {
     });
 
     // Update member's debt
-    axios.patch(`${API_URL}/members/${member.id}`, {
+    axios.patch(`${API_CONFIG.MEMBERS}?id=${member.id}`, {
         debt: member.debt + totalCost})
       .then(() => {
         // For each book, decrement available copies and set lent status if needed
@@ -261,7 +260,7 @@ const TransactionList = () => {
             // A book is considered lent when all copies are borrowed
             const isLent = newAvailableCopies === 0;
             
-            return axios.patch(`${API_URL}/books/${bookId}`, { 
+            return axios.patch(`${API_CONFIG.BOOKS}?id=${bookId}`, { 
               availableCopies: newAvailableCopies,
               lent: isLent
             });
@@ -271,7 +270,7 @@ const TransactionList = () => {
             // Add transactions to the database
             Promise.all(
               newTransactions.map((transaction) =>
-                axios.post(`${API_URL}/transactions`, transaction)
+                axios.post(API_CONFIG.TRANSACTIONS, transaction)
               )
             )
               .then((responses) => {
@@ -313,21 +312,21 @@ const TransactionList = () => {
 
     // Reduce member's debt by the book's debt cost
     axios
-      .patch(`${API_URL}/members/${member.id}`, {
+      .patch(`${API_CONFIG.MEMBERS}?id=${member.id}`, {
         debt: Math.max(0, member.debt - debtCost) // Ensure debt doesn't go below 0
       })
       .then(() => {
         // Increment the book's available copies and update lent status
         const newAvailableCopies = (book.availableCopies || 0) + 1;
         axios
-          .patch(`${API_URL}/books/${transaction.bookID}`, { 
+          .patch(`${API_CONFIG.BOOKS}?id=${transaction.bookID}`, { 
             availableCopies: newAvailableCopies,
             lent: newAvailableCopies < book.totalCopies  // Book is considered lent if not all copies are available
           })
           .then(() => {
             // Mark the transaction as returned
             axios
-              .patch(`${API_URL}/transactions/${transactionId}`, {
+              .patch(`${API_CONFIG.TRANSACTIONS}?id=${transactionId}`, {
                 returned: true
               })
               .then((response) => {

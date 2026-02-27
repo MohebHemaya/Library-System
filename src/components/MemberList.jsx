@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const API_URL = 'https://my-json-server.typicode.com/MohebHemaya/db';
+import API_CONFIG from '../config/api';
 
 const MemberList = () => {
   // Define system-wide maximum debt limit as a constant
@@ -26,11 +25,11 @@ const MemberList = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch members from JSON Server
+  // Fetch members from API
   const fetchMembers = () => {
     setIsLoading(true);
     axios
-      .get(`${API_URL}/members`)
+      .get(API_CONFIG.MEMBERS)
       .then((response) => {
         // Set default maxDebt if missing in existing members
         const membersWithMaxDebt = response.data.map(member => ({
@@ -133,7 +132,7 @@ const MemberList = () => {
     };
     
     axios
-      .post(`${API_URL}/members`, memberToAdd)
+      .post(API_CONFIG.MEMBERS, memberToAdd)
       .then((response) => {
         const updatedMembers = [...members, response.data];
         setMembers(updatedMembers);
@@ -159,7 +158,7 @@ const MemberList = () => {
     
     if (window.confirm('Are you sure you want to delete this member?')) {
       axios
-        .delete(`${API_URL}/members/${id}`)
+        .delete(`${API_CONFIG.MEMBERS}?id=${id}`)
         .then(() => {
           const updatedMembers = members.filter((member) => member.id !== id);
           setMembers(updatedMembers);

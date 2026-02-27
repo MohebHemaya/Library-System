@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-
-const API_URL = 'https://my-json-server.typicode.com/MohebHemaya/db';
+import API_CONFIG from '../config/api';
 
 const EditBook = () => {
   const { id } = useParams();
@@ -38,7 +37,7 @@ const EditBook = () => {
     setValidationError('');
     setSaveSuccess(false);
     
-    axios.get(`${API_URL}/books/${id}`)
+    axios.get(`${API_CONFIG.BOOKS}?id=${id}`)
       .then(response => {
         // Ensure all properties have default values if missing
         const bookData = {
@@ -146,7 +145,7 @@ const EditBook = () => {
       return;
     }
     
-    axios.put(`${API_URL}/books/${id}`, book)
+    axios.put(`${API_CONFIG.BOOKS}?id=${id}`, book)
       .then(() => {
         setSaveSuccess(true);
         setValidationError('');
